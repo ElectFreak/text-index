@@ -12,6 +12,7 @@ repositories {
 }
 dependencies {
     testImplementation(kotlin("test-junit"))
+    implementation("org.apache.commons:commons-csv:1.8")
 }
 tasks.withType<KotlinCompile>() {
     kotlinOptions.jvmTarget = "1.8"
