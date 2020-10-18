@@ -14,7 +14,7 @@ data class Word(val wordForm: String, val lineNumber: Int) {
  * Represents a index of a text file.
  * Contains info about every word from original text (list of [Word]'s).
  *
- * @property wordsInfo map where every index of word in dictionary mapped to a list of [Word]'s.
+ * @property wordsInfo map where every index of word (line number from dictionary) in dictionary mapped to a list of [Word]'s.
  */
 data class TextIndex(
     var wordsInfo: MutableMap<Long, MutableList<Word>>
