@@ -1,3 +1,4 @@
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import java.io.File
 
@@ -29,7 +30,7 @@ data class TextIndex(
  * @param lines text parsed to a list of it lines.
  * @return [TextIndex].
  */
-fun getTextIndex(lines: List<String>): TextIndex {
+fun getTextIndexFromText(lines: List<String>): TextIndex {
     val formattedLines: List<List<String>> =
         lines
         .filter { it.trim().isNotEmpty() } // delete empty lines from list
@@ -63,10 +64,43 @@ fun getTextIndex(lines: List<String>): TextIndex {
  * Writes a [TextIndex] to a JSON file
  *
  * @param index [TextIndex] example to be written to JSON file.
- * @param path path to a file where [TextIndex] should be written.
+ * @param file  file where [TextIndex] should be written.
  */
-fun writeTextIndexToJsonFile(index: TextIndex, path: String) {
+fun writeTextIndexToJsonFile(index: TextIndex, file: File) {
     val gson = GsonBuilder().setPrettyPrinting().create()
     val json = gson.toJson(index)
-    File(path).writeText(json)
+    file.writeText(json)
+}
+
+/**
+ * Gives a [TextIndex] from a JSON file
+ *
+ * @param json JSON file which contains [TextIndex].
+ * @return [TextIndex].
+ */
+fun getTextIndexFromJson(json: File): TextIndex {
+    val parsedJson: TextIndex = Gson().fromJson<TextIndex>(
+        json.readLines().joinToString("\n"),
+        TextIndex::class.java
+    )
+
+    return parsedJson
+}
+
+fun mostOftenMetWords(number: Int, textIndex: TextIndex): List<Long> {
+    val numberOfWords = mutableListOf<Pair<Long, Int>>()
+
+    textIndex.wordsInfo.forEach { (index: Long, wordsList: List<Word>) ->
+        numberOfWords.add(Pair(index, wordsList.size))
+    }
+
+    numberOfWords.sortBy { it.second }
+
+    val mostOftenMetWords: MutableList<Long> = mutableListOf()
+
+    for (i in 1..number) {
+        mostOftenMetWords.add(numberOfWords[numberOfWords.size - i].first)
+    }
+
+    return mostOftenMetWords
 }
