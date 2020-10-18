@@ -1,3 +1,6 @@
+import com.google.gson.GsonBuilder
+import java.io.File
+
 /**
  * Represents a single word from text in a TextIndex.
  * Contains word form, line from original text (where met) and calculate a page number.
@@ -14,7 +17,7 @@ data class Word(val wordForm: String, val lineNumber: Int) {
  * Represents a index of a text file.
  * Contains info about every word from original text (list of [Word]'s).
  *
- * @property wordsInfo map where every index of word in dictionary mapped to a list of [Word]'s.
+ * @property wordsInfo map where every index of word (line number from dictionary) in dictionary mapped to a list of [Word]'s.
  */
 data class TextIndex(
     var wordsInfo: MutableMap<Long, MutableList<Word>>
@@ -41,7 +44,7 @@ fun getTextIndex(lines: List<String>): TextIndex {
 
     formattedLines.forEachIndexed { lineNumber, line ->
         for (word in line) {
-            val indexInDictionary: Long = dictionary.getIndexOrNull(word) ?: continue // work with index of word or go to next word
+            val indexInDictionary: Long = wordsTrie.getIndexOrNull(word) ?: continue // work with index of word or go to next word
             val wordWithInfo = Word(word, lineNumber) // to be added to wordsInfo
 
             if (wordsInfo[indexInDictionary] == null) {
@@ -54,4 +57,16 @@ fun getTextIndex(lines: List<String>): TextIndex {
     }
 
     return TextIndex(wordsInfo)
+}
+
+/**
+ * Writes a [TextIndex] to a JSON file
+ *
+ * @param index [TextIndex] example to be written to JSON file.
+ * @param path path to a file where [TextIndex] should be written.
+ */
+fun writeTextIndexToJsonFile(index: TextIndex, path: String) {
+    val gson = GsonBuilder().setPrettyPrinting().create()
+    val json = gson.toJson(index)
+    File(path).writeText(json)
 }
