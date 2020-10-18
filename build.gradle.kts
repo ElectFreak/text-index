@@ -15,6 +15,7 @@ dependencies {
     testImplementation(kotlin("test-junit"))
     implementation("org.apache.commons:commons-csv:1.8")
     implementation("com.google.code.gson:gson:2.8.5")
+    implementation("com.github.ajalt.clikt:clikt:3.0.1")
 }
 tasks.withType<KotlinCompile>() {
     kotlinOptions.jvmTarget = "1.8"
