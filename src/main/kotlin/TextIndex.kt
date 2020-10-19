@@ -87,19 +87,25 @@ fun getTextIndexFromJson(json: File): TextIndex {
     return parsedJson
 }
 
+/**
+ * Gives most often met words by number and  working with [TextIndex]
+ *
+ * @param number how many words to give.
+ * @return list of word indices in dictionary
+ */
 fun mostOftenMetWords(number: Int, textIndex: TextIndex): List<Long> {
-    val numberOfWords = mutableListOf<Pair<Long, Int>>()
+    val numberOfWords = mutableListOf<Pair<Long, Int>>() // Pair of index and number of word's with this index
 
     textIndex.wordsInfo.forEach { (index: Long, wordsList: List<Word>) ->
-        numberOfWords.add(Pair(index, wordsList.size))
+        numberOfWords.add(Pair(index, wordsList.size)) // Fill for sorting
     }
 
-    numberOfWords.sortBy { it.second }
+    numberOfWords.sortBy { it.second } // Sorting by number of words in text
 
-    val mostOftenMetWords: MutableList<Long> = mutableListOf()
+    val mostOftenMetWords: MutableList<Long> = mutableListOf() // To be returned
 
     for (i in 1..number) {
-        mostOftenMetWords.add(numberOfWords[numberOfWords.size - i].first)
+        mostOftenMetWords.add(numberOfWords[numberOfWords.size - i].first) // Go from biggest number to smallest
     }
 
     return mostOftenMetWords
