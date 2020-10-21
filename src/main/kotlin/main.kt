@@ -20,9 +20,9 @@ class Input : CliktCommand() {
 
     val text: File? by option(help="Path to txt file")
         .file(mustExist = true, canBeDir = false, mustBeReadable = true)
-    val textIndex: File? by option(help="Path to JSON file for writing text index")
+    val output: File? by option(help="Path to JSON file for writing text index")
         .file(mustExist = false, canBeDir = false, mustBeWritable = true)
-    val fromTextIndex: File? by option(help="Path to JSON file with text index for working with")
+    val from: File? by option(help="Path to JSON file with text index for working with")
         .file(mustExist = true, canBeDir = false, mustBeReadable = true)
 
 
@@ -30,13 +30,13 @@ class Input : CliktCommand() {
 
         // Mode 1: create text index
 
-        if (textIndex != null && text == null) {
-            echo("Path to text (--path-to-text) is required for creating text index")
+        if (output != null && text == null) {
+            echo("Path to text (--text) is required for creating text index")
         }
 
-        if (textIndex != null && text != null) {
+        if (output != null && text != null) {
             try {
-                writeTextIndexToJsonFile(getTextIndexFromText(text!!.readLines()), textIndex!!)
+                writeTextIndexToJsonFile(getTextIndexFromText(text!!.readLines()), output!!)
             } catch (e: Exception) {
                 echo("Error:")
                 echo(e.message)
@@ -45,12 +45,12 @@ class Input : CliktCommand() {
 
         // Mode 2: working with text index
 
-        if (number != null && fromTextIndex == null) {
-            echo("Path to json (--path-to-json) is required for working with text index")
+        if (number != null && from == null) {
+            echo("Path to json file (--from) is required for working with text index")
         }
 
-        if (number != null && fromTextIndex != null) {
-            val textIndex = getTextIndexFromJson(fromTextIndex!!)
+        if (number != null && from != null) {
+            val textIndex = getTextIndexFromJson(from!!)
             for (index in mostOftenMetWords(number!!, textIndex)) {
                 echo(getWordByIndex(index).split(",")[0])
             }
