@@ -25,6 +25,16 @@ data class TextIndex(
 )
 
 /**
+ * Removes empty lines (and items containing only spaces) from List<String>
+ *
+ * @param lines lines of text.
+ * @return not empty lines from [lines].
+ */
+fun removeEmptyLines(lines: List<String>): List<String> {
+    return lines.filter { it.trim().isNotEmpty() }
+}
+
+/**
  * Gives a [TextIndex] by some text which represented as List<String>
  *
  * @param lines text parsed to a list of it lines.
@@ -32,8 +42,7 @@ data class TextIndex(
  */
 fun getTextIndexFromText(lines: List<String>): TextIndex {
     val formattedLines: List<List<String>> =
-        lines
-        .filter { it.trim().isNotEmpty() } // delete empty lines from list
+        removeEmptyLines(lines) // delete empty lines from list
         .map { line -> line
                 .trim()
                 .split(" ") // split line to array by space

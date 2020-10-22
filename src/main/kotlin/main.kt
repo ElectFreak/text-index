@@ -5,6 +5,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.int
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
+import writeTextIndexToJsonFile
 import java.io.File
 import java.lang.Exception
 import java.nio.charset.Charset
@@ -16,7 +17,7 @@ val pathToOdict = "data/new_odict.csv"
 val wordsTrie = makeWordsTrie(pathToDictionary)
 
 class Input : CliktCommand() {
-    val number: Int? by option(help="Count of most often met words").int().default(1)
+    val number: Int? by option(help="Count of most often met words").int()
 
     val text: File? by option(help="Path to txt file")
         .file(mustExist = true, canBeDir = false, mustBeReadable = true)
@@ -24,6 +25,8 @@ class Input : CliktCommand() {
         .file(mustExist = false, canBeDir = false, mustBeWritable = true)
     val from: File? by option(help="Path to JSON file with text index for working with")
         .file(mustExist = true, canBeDir = false, mustBeReadable = true)
+    val printAllLines: String? by option(help="The word by which all lines containing it will be displayed")
+    val infoAbout: String? by option(help="Print info about this word")
 
 
     override fun run() {
@@ -53,6 +56,27 @@ class Input : CliktCommand() {
             val textIndex = getTextIndexFromJson(from!!)
             for (index in mostOftenMetWords(number!!, textIndex)) {
                 echo(getWordByIndex(index).split(",")[0])
+            }
+        }
+
+        if (infoAbout != null && from != null) {
+            val textIndex = getTextIndexFromJson(from!!)
+            val wordIndex = wordsTrie.getIndexOrNull(infoAbout!!)
+            val wordsList = textIndex.wordsInfo[wordIndex]!!
+            echo("Word $infoAbout was met ${wordsList.size} times")
+            for (word in wordsList) {
+                echo("On page ${word.pageNumber} in form ${word.wordForm}")
+            }
+        }
+
+        // Mode 3: print all lines containing the word
+
+        if (printAllLines != null && text != null) {
+            val textIndex = getTextIndexFromText(text!!.readLines())
+            val textLines = removeEmptyLines(text!!.readLines())
+            val wordIndex = wordsTrie.getIndexOrNull(printAllLines!!)
+            textIndex.wordsInfo[wordIndex]?.forEach { word ->
+                echo(textLines[word.lineNumber])
             }
         }
     }
