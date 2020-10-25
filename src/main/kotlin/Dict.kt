@@ -36,13 +36,13 @@ fun makeWordsTrie(pathToDictionary: String): Trie<Char> {
     return wordsTrie
 }
 
+val odict = File(pathToOdict).readLines()
 /**
  * Gives word from dictionary by its index (if exist)
  *
  * @return word in its first form from dictionary or null if there is no word with such index.
  */
 fun getWordByIndex(index: Long): String? {
-    require(File(pathToOdict).isFile) { "odict dictionary must exists" }
 
-    return File(pathToOdict).readLines()[index.toInt()]
+    return odict[index.toInt()]
 }
