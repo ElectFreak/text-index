@@ -102,7 +102,7 @@ fun getTextIndexFromJson(json: File): TextIndex {
  * @param number how many words to give.
  * @return list of word indices in dictionary
  */
-fun mostOftenMetWords(number: Int, textIndex: TextIndex): List<Long> {
+fun getMostOftenMetWords(number: Int, textIndex: TextIndex): List<Long> {
     val numberOfWords = mutableListOf<Pair<Long, Int>>() // Pair of index and number of word's with this index
 
     textIndex.wordsInfo.forEach { (index: Long, wordsList: List<Word>) ->
