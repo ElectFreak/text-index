@@ -1,6 +1,8 @@
+import com.github.ajalt.clikt.output.TermUi.echo
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import java.io.File
+import java.lang.Exception
 
 /**
  * Represents a single word from text in a TextIndex.
@@ -43,22 +45,27 @@ fun removeEmptyLines(lines: List<String>): List<String> {
 fun getTextIndexFromText(lines: List<String>): TextIndex {
     val formattedLines: List<List<String>> =
         removeEmptyLines(lines) // delete empty lines from list
-        .map { line -> line
-                .trim()
-                .split(" ") // split line to array by space
-                .map { word -> word.filter { it.isLetter() }.toLowerCase() } // make words contain only letters & toLowerCase
-                .filter { word -> word.isNotEmpty() } // delete empty words
-        }
+            .map { line ->
+                line
+                    .trim()
+                    .split(" ") // split line to array by space
+                    .map { word ->
+                        word.filter { it.isLetter() }.toLowerCase()
+                    } // make words contain only letters & toLowerCase
+                    .filter { word -> word.isNotEmpty() } // delete empty words
+            }
 
     val wordsInfo = mutableMapOf<Long, MutableList<Word>>() // to be returned
 
     formattedLines.forEachIndexed { lineNumber, line ->
         for (word in line) {
-            val indexInDictionary: Long = wordsTrie.getIndexOrNull(word) ?: continue // work with index of word or go to next word
+            val indexInDictionary: Long =
+                wordsTrie.getIndexOrNull(word) ?: continue // work with index of word or go to next word
             val wordWithInfo = Word(word, lineNumber) // to be added to wordsInfo
 
             if (wordsInfo[indexInDictionary] == null) {
-                wordsInfo[indexInDictionary] = mutableListOf<Word>(wordWithInfo) // there are no words with this index yet, create new list
+                wordsInfo[indexInDictionary] =
+                    mutableListOf<Word>(wordWithInfo) // there are no words with this index yet, create new list
             } else {
                 wordsInfo[indexInDictionary]!!.add(wordWithInfo) // there are definitely some words with this index, checked earlier
             }
@@ -87,13 +94,17 @@ fun writeTextIndexToJsonFile(index: TextIndex, file: File) {
  * @param json JSON file which contains [TextIndex].
  * @return [TextIndex].
  */
-fun getTextIndexFromJson(json: File): TextIndex {
-    val parsedJson: TextIndex = Gson().fromJson<TextIndex>(
-        json.readText(),
-        TextIndex::class.java
-    )
-
-    return parsedJson
+fun getTextIndexFromJson(json: File): TextIndex? {
+    return try {
+        Gson().fromJson<TextIndex>(
+            json.readText(),
+            TextIndex::class.java
+        )
+    } catch(e: Exception) {
+        echo("Error in parsing text index: ")
+        echo(e.message)
+        null
+    }
 }
 
 /**
