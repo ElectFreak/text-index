@@ -89,7 +89,7 @@ fun writeTextIndexToJsonFile(index: TextIndex, file: File) {
  */
 fun getTextIndexFromJson(json: File): TextIndex {
     val parsedJson: TextIndex = Gson().fromJson<TextIndex>(
-        json.readLines().joinToString("\n"),
+        json.readText(),
         TextIndex::class.java
     )
 
@@ -97,7 +97,7 @@ fun getTextIndexFromJson(json: File): TextIndex {
 }
 
 /**
- * Gives most often met words by number and  working with [TextIndex]
+ * Gives most often met words by number and working with [TextIndex]
  *
  * @param number how many words to give.
  * @return list of word indices in dictionary
