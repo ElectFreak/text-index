@@ -25,9 +25,7 @@ fun readCategories(): Categories {
  */
 fun getCategory(categoryName: String): Category {
     val categories = readCategories()
-    println(categoryName)
     val categoryList = categories[categoryName]
-    println(categoryList)
     if (categoryList == null) {
         println("Failed to get category, try again")
         exitProcess(0)
