@@ -1,15 +1,11 @@
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.output.TermUi.echo
+import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.int
-import org.apache.commons.csv.CSVFormat
-import org.apache.commons.csv.CSVParser
 import java.io.File
 import java.lang.Exception
-import java.nio.charset.Charset
-import java.nio.file.Files
-import java.nio.file.Paths
 
 
 val wordsTrie = makeWordsTrie(pathToDictionary)
@@ -21,7 +17,7 @@ class Input : CliktCommand() {
     val textPath: File? by option(help = "Path to txt file")
         .file(mustExist = true, canBeDir = false, mustBeReadable = true)
     val output: File? by option(help = "Path to JSON file for writing text index")
-        .file(mustExist = false, canBeDir = false, mustBeWritable = true)
+        .file(mustExist = false, canBeDir = false, mustBeWritable = true).default(File("data/index.json"))
 
 
     // Mode 2: working with text index
@@ -40,11 +36,7 @@ class Input : CliktCommand() {
 
         // Mode 1: create text index
 
-        if (output != null && textPath == null) {
-            echo("Path to text (--text-path) is required for creating text index")
-        }
-
-        if (output != null && textPath != null) {
+        if (textPath != null) {
             try {
                 writeTextIndexToJsonFile(
                     getTextIndexFromText(textPath!!.readLines()),
@@ -68,7 +60,7 @@ class Input : CliktCommand() {
         }
 
         if (number != null && textIndex != null) {
-            for (index in mostOftenMetWords(number!!, textIndex)) {
+            for (index in getMostOftenMetWords(number!!, textIndex)) {
                 echo(getWordByIndex(index)?.split(",")?.get(0))
             }
         }
