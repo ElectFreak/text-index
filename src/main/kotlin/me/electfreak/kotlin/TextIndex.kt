@@ -1,3 +1,5 @@
+package me.electfreak.kotlin
+
 import com.github.ajalt.clikt.output.TermUi.echo
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder

@@ -1,3 +1,5 @@
+package me.electfreak.kotlin
+
 import java.io.File
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

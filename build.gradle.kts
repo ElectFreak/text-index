@@ -12,6 +12,7 @@ repositories {
     jcenter()
 }
 dependencies {
+    implementation("org.junit.jupiter:junit-jupiter:5.4.2")
     val junitVersion = "5.6.2"
 
     testImplementation(kotlin("test-junit"))
@@ -20,6 +21,7 @@ dependencies {
     implementation("com.github.ajalt.clikt:clikt:3.0.1")
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    testImplementation(kotlin("test"))
 }
 tasks.withType<KotlinCompile>() {
     kotlinOptions.jvmTarget = "1.8"
@@ -32,5 +34,5 @@ tasks.test {
 }
 
 application {
-    mainClassName = "MainKt"
+    mainClassName = "me.electfreak.kotlin.MainKt"
 }

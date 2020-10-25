@@ -1,4 +1,6 @@
 // Думай позитивно: стакан всегда наполовину полон, всегда.
+package me.electfreak.kotlin
+
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.output.TermUi.echo
 import com.github.ajalt.clikt.parameters.options.option

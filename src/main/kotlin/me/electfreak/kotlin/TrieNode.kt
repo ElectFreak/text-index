@@ -1,3 +1,5 @@
+package me.electfreak.kotlin
+
 class TrieNode<Key>(var key: Key?, var parent: TrieNode<Key>?) {
 
     var index: Long? = null

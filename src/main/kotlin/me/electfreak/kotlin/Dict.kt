@@ -1,3 +1,5 @@
+package me.electfreak.kotlin
+
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import java.io.File
@@ -9,10 +11,10 @@ val pathToDictionary = "data/odict.csv"
 val pathToOdict = "data/new_odict.csv"
 
 /**
- * Uses csv dictionary for building Trie with words.
-     * Reads csv file by line and fill Trie by every form of every word.
+ * Uses csv dictionary for building textIndex.Trie with words.
+     * Reads csv file by line and fill textIndex.Trie by every form of every word.
  *
- * @return Trie with words and indices from dictionary.
+ * @return textIndex.Trie with words and indices from dictionary.
  */
 fun makeWordsTrie(pathToDictionary: String): Trie<Char> {
     val wordsTrie: Trie<Char> = Trie<Char>() // to be returned
@@ -27,7 +29,7 @@ fun makeWordsTrie(pathToDictionary: String): Trie<Char> {
                             it,
                             csvParser.recordNumber - 1
                         )
-                    } // insert word form to a Trie with index – line number from dictionary
+                    } // textIndex.insert word form to a textIndex.Trie with index – line number from dictionary
                 }
             }
         }
@@ -43,6 +45,5 @@ val odict = File(pathToOdict).readLines()
  * @return word in its first form from dictionary or null if there is no word with such index.
  */
 fun getWordByIndex(index: Long): String? {
-
-    return odict[index.toInt()]
+    return odict[index.toInt()].split(",")[0]
 }

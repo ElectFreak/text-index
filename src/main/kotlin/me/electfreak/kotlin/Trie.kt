@@ -1,3 +1,5 @@
+package me.electfreak.kotlin
+
 class Trie<Key> {
 
     private val root = TrieNode<Key>(key = null, parent = null)
