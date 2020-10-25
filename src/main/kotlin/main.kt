@@ -1,6 +1,6 @@
+// Думай позитивно: стакан всегда наполовину полон, всегда.
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.output.TermUi.echo
-import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.int
@@ -15,9 +15,9 @@ class Input : CliktCommand() {
     // Mode 1: create text index
 
     val textPath: File? by option(help = "Path to txt file")
-        .file(mustExist = true, canBeDir = false, mustBeReadable = true)
+        .file()
     val output: File? by option(help = "Path to JSON file for writing text index")
-        .file(mustExist = false, canBeDir = false, mustBeWritable = true).default(File("data/index.json"))
+        .file()
 
 
     // Mode 2: working with text index
@@ -34,61 +34,63 @@ class Input : CliktCommand() {
 
     override fun run() {
 
-        // Mode 1: create text index
+        if (textPath != null && textPath!!.canRead()) {
+            // Task 1: write text index to file
+            if (output != null && (output!!.canWrite() || !output!!.exists())) {
+                try {
+                    writeTextIndexToJsonFile(
+                        getTextIndexFromText(textPath!!.readLines()),
+                        output!!
+                    )
+                } catch (e: Exception) {
+                    echo("Failed to write text index:")
+                    echo(e.message)
+                }
+            }
 
-        if (textPath != null) {
+            // Task 3: print all lines containing the word
+            if (printAllLines != null) {
+                val textLines = removeEmptyLines(textPath!!.readLines())
+                val wordIndex = wordsTrie.getIndexOrNull(printAllLines!!)
+                try {
+                    val textIndex = getTextIndexFromText(textPath!!.readLines())
+                    textIndex.wordsInfo[wordIndex]?.forEach { word ->
+                        echo(textLines[word.lineNumber])
+                    }
+
+                } catch (e: Exception) {
+                    echo("Failed to print all lines: ")
+                    echo(e.message)
+                }
+            }
+
+        }
+
+        // Task 2: working with existing text index file
+        if (textIndexPath != null && textIndexPath!!.canRead()) {
             try {
-                writeTextIndexToJsonFile(
-                    getTextIndexFromText(textPath!!.readLines()),
-                    output!!
-                )
+                val textIndex = getTextIndexFromJson(textIndexPath!!)
+
+                if (infoAbout != null && textIndex != null) {
+                    printInfoAboutWord(infoAbout!!, textIndex)
+                }
+
+                if (fromGroup != null && textIndex != null) {
+                    val categoryList = getCategory(fromGroup!!)
+                    for (word in categoryList) {
+                        printInfoAboutWord(word, textIndex)
+                    }
+                }
+
+                if (number != null && textIndex != null) {
+                    for (wordIndex in getMostOftenMetWords(number!!, textIndex)) {
+                        echo(getWordByIndex(wordIndex))
+                    }
+                }
+
             } catch (e: Exception) {
-                echo("Error:")
+                echo("Failed to work with text index: ")
                 echo(e.message)
-            }
-        }
-
-        // Mode 2: working with text index
-
-        var textIndex: TextIndex? = null
-        if (textIndexPath != null) {
-            textIndex = getTextIndexFromJson(textIndexPath!!)
-        }
-
-        if (number != null && textIndexPath == null) {
-            echo("Path to text index in json format (--text-index) is required for working with text index")
-        }
-
-        if (number != null && textIndex != null) {
-            for (index in getMostOftenMetWords(number!!, textIndex)) {
-                echo(getWordByIndex(index)?.split(",")?.get(0))
-            }
-        }
-
-        if (infoAbout != null && textIndex != null) {
-            printInfoAboutWord(infoAbout!!, textIndex)
-        }
-
-        if (fromGroup != null && textIndex != null) {
-            val categoryList = getCategory(fromGroup!!)
-            for (word in categoryList) {
-                printInfoAboutWord(word, textIndex)
-            }
-        }
-
-        // Mode 3: print all lines containing the word
-
-        if (textPath == null && printAllLines != null) {
-            echo("Path to text (--text-path) is required for --print-all-lines")
-        }
-
-        if (printAllLines != null && textPath != null) {
-            val textLines = removeEmptyLines(textPath!!.readLines())
-            val wordIndex = wordsTrie.getIndexOrNull(printAllLines!!)
-
-            val textIndex = getTextIndexFromText(textPath!!.readLines())
-            textIndex.wordsInfo[wordIndex]?.forEach { word ->
-                echo(textLines[word.lineNumber])
             }
         }
     }
