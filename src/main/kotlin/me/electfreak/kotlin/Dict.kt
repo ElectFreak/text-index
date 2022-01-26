@@ -23,7 +23,7 @@ fun makeWordsTrie(pathToDictionary: String): Trie<Char> {
         CSVParser(reader, CSVFormat.DEFAULT.withSkipHeaderRecord()).use { csvParser ->
             for (csvRecord in csvParser) {
 //                 Accessing Values by Column Index
-                csvRecord.filterIndexed { index, item -> index != 1 }.forEach { // skip second records – type of word
+                csvRecord.filterIndexed { index, _ -> index != 1 }.forEach { // skip second records – type of word
                     wordsTrie.apply {
                         insert(
                             it,
