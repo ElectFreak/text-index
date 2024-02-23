@@ -12,15 +12,16 @@ repositories {
     jcenter()
 }
 dependencies {
-    implementation("org.junit.jupiter:junit-jupiter:5.4.2")
     val junitVersion = "5.6.2"
-
-    testImplementation(kotlin("test-junit"))
+    implementation("org.junit.jupiter:junit-jupiter:5.4.2")
     implementation("org.apache.commons:commons-csv:1.8")
     implementation("com.google.code.gson:gson:2.8.5")
     implementation("com.github.ajalt.clikt:clikt:3.0.1")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+
+    testImplementation(kotlin("test-junit"))
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation(kotlin("test"))
 }
 tasks.withType<KotlinCompile>() {
@@ -35,5 +36,5 @@ tasks.test {
 }
 
 application {
-    mainClassName = "me.electfreak.kotlin.MainKt"
+    mainClassName = "me.electfreak.MainKt"
 }

@@ -1,4 +1,7 @@
+import me.electfreak.getIndexOrNull
+import me.electfreak.getTextIndexFromText
 import me.electfreak.kotlin.*
+import me.electfreak.wordsTrie
 
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory

@@ -1,4 +1,4 @@
-package me.electfreak.kotlin
+package me.electfreak
 
 class TrieNode<Key>(var key: Key?, var parent: TrieNode<Key>?) {
 

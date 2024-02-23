@@ -1,4 +1,4 @@
-package me.electfreak.kotlin
+package me.electfreak
 
 class Trie<Key> {
 

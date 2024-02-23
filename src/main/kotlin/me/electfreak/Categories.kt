@@ -1,4 +1,4 @@
-package me.electfreak.kotlin
+package me.electfreak
 
 import java.io.File
 import com.google.gson.Gson

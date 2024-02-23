@@ -1,4 +1,4 @@
-package me.electfreak.kotlin
+package me.electfreak
 
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser

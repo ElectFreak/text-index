@@ -1,8 +1,8 @@
-# Составление индекса текстового файла
+# Indexing a text file
 
-[Описание задания](./TASK.md)
+[Task Description](./TASK.md)
 
-## Схема json индекса файла с текстом
+## Scheme for json index of text file
 
 ```json
   {
@@ -33,49 +33,32 @@
 }
 ```
 
-### Запустите для распаковки словаря:  
+`pageNumber` - number of the page on which the word was encountered
+
+`wordForm` - the form in which the word was encountered
+
+`lineNumber` - on which line in the source text (excluding empty lines) the word was encountered.
+
+That is, the number of the word in the dictionary is matched with an array with an object for each case of meeting this word in the text.
+
+## Run Examples:
+
+### Run to unpack the dictionary:
 ```bash
 ./dict.sh
 ```
-Внешний объект имеет одно поле *wordsInfo* – объект с ключами в виде номера слова в словаре. 
 
-Содержимое *wordsInfo* – массивы с объектами класса *Words*, каждое содержит три поля: 
-pageNumber – номер страницы, на которой слово было встречено 
-wordForm – форма, в которой слово было встречено 
-lineNumber – на какой строке в исходном тексте (без учета пустых строк) слово было встречено
-
-То есть номеру слова в словаре сопоставлен массив с объектом на каждый случай встречи этого слова в тексте.
-
-## Как использовать программу?
-
-**Запустить программу можно с помощью *gradle run*.**
-
-Программа работает как консольное приложение и принимает набор аргументов при запуске.  
- 
-**--output** –путь к файлу, в который будет записан индекс текстового файла в формате json 
- 
-**--text-path** – путь к файлу с текстом 
- 
-**--text-index-path** – путь к индексу текстового файла в формате json для работы с ним 
-
-**--number** – количество наиболее часто встречаемых слов для вывода 
-
-**--number** – количество наиболее часто встречаемых слов для вывода 
-
-**--info-about** – слово, информацию о котором нужно вывести
-
-**--from-group** – групппа слов, информацию о которых нужно вывести
-
-**--print-all-lines** – слово, строки с которым нужно вывести
-
-## Примеры запуска:
-
-### Составление индекса:
-```
-gradle run --args="--text-path='data/Childhood.txt' --output='data/index.json'"
+### Index compilation:
+```bash
+./gradlew run --args="create-index --text-path='data/Childhood.txt' --text-index-path='data/index.json'" 
 ```
 
-### Вывод информации на основе индекса:
+### Find all occurrences:
+```bash
+./gradlew run --args="find-all --text-path='data/Childhood.txt' --text-index-path='data/index.json' --word='лес'"
 ```
-gradle run --args="--text-index-path='data/index.json' --number=10"
+
+### Output information based on the index:
+```bash
+./gradlew run --args="stats-from-index --text-index-path='data/index.json' --word='лес' --number=10 --from-group='мебель'"    
 ```
