@@ -12,7 +12,7 @@ class Trie<Key> {
                 current.children[element] = TrieNode(key = element, parent = current)
             }
 
-            current = current.children[element]!!
+            current = current.children.getValue(element)
         }
 
         current.index = index

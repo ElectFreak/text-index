@@ -8,4 +8,3 @@ import me.electfreak.commands.StatsFromIndex
 import me.electfreak.commands.TextIndexCommand
 
 fun main(args: Array<String>) = TextIndexCommand().subcommands(CreateIndex(), FindAll(), StatsFromIndex()).main(args)
-

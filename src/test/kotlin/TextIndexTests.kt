@@ -1,14 +1,12 @@
 import me.electfreak.getIndexOrNull
 import me.electfreak.getTextIndexFromText
-import me.electfreak.kotlin.*
 import me.electfreak.wordsTrie
-
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import java.io.File
 import java.util.stream.IntStream
 import java.util.stream.Stream
-import kotlin.test.assertEquals
 
 val textIndex = getTextIndexFromText(File("data/Childhood.txt").readLines())
 

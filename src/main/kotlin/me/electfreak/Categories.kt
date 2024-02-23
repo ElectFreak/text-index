@@ -1,8 +1,8 @@
 package me.electfreak
 
-import java.io.File
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.io.File
 import kotlin.system.exitProcess
 
 typealias Category = List<String>
